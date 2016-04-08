@@ -6,6 +6,14 @@ class OrdersController < ApplicationController
   def index
     @orders = Order.all
   end
+  
+  def sales
+    @order = Order.all.where(seller: current_user).order("created_at DESC")
+  end
+  
+  def purchases
+      @order = Order.all.where(buyer: current_user).order("created_at DESC")
+  end
 
   # GET /orders/1
   # GET /orders/1.json

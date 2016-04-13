@@ -1,28 +1,40 @@
 <div class="jumbotron">
-<h1>Handcrafted Items from <br>
-                    around the world</h1>
-<h2>Discover one of a kind items!</h2>
-</div>
-<div class="center">
-<div class="row">
-  <% @listings.each do |listing| %>
-  <div class="col-md-3">
-    <div class="thumbnail">
-      <%= link_to image_tag(listing.image.url), listing %>
-     <div class="caption">
-       <h3><%= listing.name %></h3>
-       <p><%= number_to_currency(listing.price) %></p>
-       <p><%= "Sold by #{listing.user.name}" %></p>
-  </div>
-   </div>
-
-  </div>
-  <% end %>
-
-</div>
-</div>
-
-<br>
+    <h1>Handcrafted Items from 
+        <br>
+                    around the world
+        </h1>
+        <h2>Discover one of a kind items!</h2>
+    </div>
+    <div class="center">
+        <%= form_tag(listings_path, :method => "get", id: "search-form") do %>
+        <%= text_field_tag :search, params[:search], placeholder: "Search Listings" %>
+        <%= submit_tag "Search" %>
+        <% end %>
+        
+        <% if @listings.present? %>
+            <div class="row">
+                <% @listings.each do |listing| %>
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <%= link_to image_tag(listing.image.url), listing %>
+                        <div class="caption">
+                            <h3><%= listing.name %>
+                            </h3>
+                            <p><%= number_to_currency(listing.price) %>
+                            </p>
+                            <p><%= "Sold by #{listing.user.name}" %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <% end %>
+            </div>
+        <% else %>
+        <p>There are no listings containing the term(s) <%= params[:search] %>.</p>
+        <% end %>
+    </div>
+    <br>
+    
 <% if user_signed_in? %>
 <%= link_to 'New Listing', new_listing_path, class:"btn btn-link" %>
 <% end %>

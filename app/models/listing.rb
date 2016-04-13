@@ -13,6 +13,14 @@ class Listing < ActiveRecord::Base
   validates :name, :description, :price, presence: true
   validates :price, numericality: {greater_than: 0}
   validates_attachment_presence :image
+  
+  def self.search(search)
+      if Rails.env.development?
+        where("name LIKE ?", "%#{search}%") 
+      else
+        where("name ILIKE ?", "%#{search}%") 
+      end
+  end
 
   belongs_to :user
   has_many :orders
